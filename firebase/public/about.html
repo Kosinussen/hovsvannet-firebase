@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    
+    <meta charset="UTF-8">
+    <title>Hovsvannet</title>
+    <link rel="stylesheet" href="hovsvannet.css">
+    <link href="logoHovsvannet.png" sizes="96x96" rel="icon" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="index.html"><img src="logoHovsvannet.png" style="height: 15vh;"></a>
+        <div class="menuDiv">
+            <img src="menuIconWhite.png" style="height: 10vh; float: right; " onclick="toggleDropdown()" >
+            <div id="myDropdown" class="dropdown-content">
+                <a href="index.html">Temperatur i Hovsvannet</a>
+                <a href="waterLevel.html">Vannstand Hovsvannet</a>
+                <a href="about.html">Info om Hovsvannet</a>
+            </div>
+        </div>
+    </nav>
+    <div style="height: 20vh;"></div>
+
+    <div class="centerDiv">
+        <div class="div">
+            <p class="title2">Hvor er Hovsvannet?</p>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d35193.01655732207!2d6.46218191363682!3d58.4878480715095!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4639ec2502fb8fa9%3A0xd21d5438f45dae8c!2sHovsvatnet!5e0!3m2!1sno!2sno!4v1685041932412!5m2!1sno!2sno" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <div class="grid">
+                <div style="width: 30vw; padding-right: 30px;">
+                    <p class="title2">Info</p>
+                    <table border="2">
+                        <tr>
+                            <th>Navn</th>
+                            <th>Hovsvannet</th>
+                        </tr>
+                        <tr>
+                            <td>Maksimum Dybde</td>
+                            <td>67m</td>
+                        </tr>
+                        <tr>
+                            <td>Areal</td>
+                            <td>4,14 km²</td>
+                        </tr>
+                        <tr>
+                            <td>Volum</td>
+                            <td>132,427 mill. m3</td>
+                        </tr>
+                        <tr>
+                            <td>Nedbørfeltareal</td>
+                            <td>185,191 km²</td>
+                        </tr>
+                        <tr>
+                            <td>Årstilsig</td>
+                            <td>389,33 mill. m3 pr. år</td>
+                        </tr>
+                        <tr>
+                            <td>Oppholdstid</td>
+                            <td>0,341 år</td>
+                        </tr>
+                    </table>
+                    <p>Data fra NVE</p>
+                </div>
+                
+                <div  style="width: 50vw;">
+                    <p class="title2">Om prosjektet</p>
+                    <p class="title3">I elven som renner ut fra hovsvannet er det satt en USB-temperaturmåler i vannet. Den er plassert omtrent midt i elva ca 20cm under vannoverflaten.</p>
+                    <p class="title3">Lengre opp i elva er vannstandsmåleren. Denne er plassert ca. 3 meter over normal vannstand. Sensoren er av typen HC-SR04 som er en ultralyssensor. Denne er igjen koblet til en arduino som prosesserer signalene fra sensoren.</p>
+                    <p class="title3"> Måleenhetene er koblet til en Rock 4C+ som er en SBC (Single Board Computer). Dataene lagres hvert minutt i Firebase Realtime Database. Dataene hentes så fra databasen og vises her på nettsiden.</p>
+                    <br>
+                </div>
+                
+            </div>
+            <p style="text-align: right;"> versjon 2.8 </p> 
+            
+        </div> 
+    </div> 
+    <script>
+        //-------------------------------------------------------------------------------------------------
+        //Menu
+        function toggleDropdown() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
+    </script> 
+</body>
+</html>
+
