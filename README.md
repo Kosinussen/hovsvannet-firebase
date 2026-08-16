@@ -1,2 +1,3 @@
 # Hovsvannet
-i ain't reading all that 
+## About
+This is a simple project which uses firebase hosting to run the Hovsvannet website at https://hovsvannet.web.app/, and uses firebase for database.
