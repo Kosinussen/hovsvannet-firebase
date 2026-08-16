@@ -2,8 +2,9 @@ const admin = require("firebase-admin");
 const exec = require('child_process').exec;
 const serialport = require('serialport');
 const Readline = require('@serialport/parser-readline');
+const fs = require('fs').promises;
 
-const port = new serialport.SerialPort({ 
+const port = new serialport.SerialPort({
   baudRate: 9600,
   path: "/dev/ttyACM0"
 });
@@ -24,7 +25,10 @@ admin.initializeApp({
 var db = admin.database();
 const measurements = db.ref('measurements');
 const waterLevelMeasurements = db.ref('waterLevelMeasurements');
-const apiKey = "281932b2-cbc1-4e42-828a-e8fc61549de3";
+
+
+let text = (await fs.readFile(".env")).toString();
+const apiKey = text.trimEnd().split("=")[1];
 const url = "https://badetemperaturer.yr.no/api/registrere";
 
 let temp
@@ -44,7 +48,7 @@ async function startMeasurements(){
     waterLevelKey = parseInt(Object.keys(lastWaterLevelMeasurement.val())[0])
     console.log('siste waterTemperature-key i databasen: ', waterTemperatureKey)
     console.log('siste waterLevel-key i databasen: ', waterLevelKey)
-    
+
     // mottar vannstandsdata far arduino
     port.pipe(parser);
     parser.on('data', (data) => {
@@ -60,10 +64,10 @@ async function startMeasurements(){
 
 function getWaterTemperature(){
     try{
-        exec("digitemp_DS9097 -q -t 0", function(error, stdout, stderr){ 
+        exec("digitemp_DS9097 -q -t 0", function(error, stdout, stderr){
         temp = parseFloat(stdout)
         if(temp<50){
-            console.log('waterTemperatureKey: ',waterTemperatureKey); 
+            console.log('waterTemperatureKey: ',waterTemperatureKey);
             console.log('temperatur: ',stdout)
             const date = Math.ceil(((new Date()).getTime())/1000)
             measurements.update({
@@ -72,10 +76,10 @@ function getWaterTemperature(){
                 dato: date
                 }
             });
-            waterTemperatureKey++ 
+            waterTemperatureKey++
         }else{
             console.log("Error: temperatur, registrert temperatur: ", temp)
-        } 
+        }
     });
     }
     catch(err){
@@ -89,14 +93,14 @@ async function postRequestYr(){
     const payload = [
             {
             "name": "Hovsvatnet",
-            "lat": 58.49370, 
+            "lat": 58.49370,
             "lon": 6.50388,
             "heatedWater": false,
             "temperature": temp.toFixed(1),
             "time": date
             }
         ];
-    
+
     try{
         const response = await fetch(url, {
             method: 'POST',
@@ -119,7 +123,7 @@ async function getWaterLevel(){
         // sjekker om det er noen valide measurements og sender da til databasen
         if(validWaterLevelArray[5]){
             validWaterLevelArray.sort(function(a, b){return a-b});
-            console.log('waterLevelKey: ',waterLevelKey); 
+            console.log('waterLevelKey: ',waterLevelKey);
             console.log("waterlevel: "+ validWaterLevelArray[Math.floor(validWaterLevelArray.length/2)].toFixed(1))
             waterLevelMeasurements.update({
                 [waterLevelKey]:{
